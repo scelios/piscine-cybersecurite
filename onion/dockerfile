@@ -1,0 +1,8 @@
+FROM debian:latest
+RUN apt update -y && apt install tor -y
+RUN apt install apache2
+RUN apt install curl -y
+RUN apt install vim -y
+RUN apt install net-tools -y
+RUN apt install nginx -y
+CMD     ["tor"]

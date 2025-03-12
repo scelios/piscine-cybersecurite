@@ -1,0 +1,40 @@
+version: "3"
+networks:
+  open:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.23.0.0/16
+  protected:
+    internal: True
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.22.0.0/16
+services:
+  tor:
+    build: .
+    container_name: tor
+    volumes:
+      - ./tor/etc:/etc/tor/      # For torrc
+      - ./tor/var:/var/lib/tor   # For HiddenServiceDirs and DataDirectory
+    restart: unless-stopped
+    networks:
+      open:
+        ipv4_address: 172.23.0.2
+      protected:
+        ipv4_address: 172.22.0.3
+
+  server:
+    image: nginx:latest
+    container_name: server
+    ports:
+      - 80:80
+    volumes:
+      - ./html:/usr/share/nginx/html
+    restart: unless-stopped
+    networks:
+      protected:
+        ipv4_address: 172.22.0.2

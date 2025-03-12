@@ -36,18 +36,6 @@ def generate_hash (K: str, C: int):
     # hmac.digest() always uses big endian.
     return hash
 
-TOKEN_LENGTH = 6 # How many digits should each token have?
-
-def truncated_hash_to_token (code: int, digits: int = TOKEN_LENGTH):
-    """Takes a truncated HMAC code number and returns the modulo of that to
-    return the requested number of digits"""
-    code = code % 10 ** digits # This is basically a rounding up
-    # NOTE: Sometimes the resulting code is less than the amount of digits. In
-    # that case, we must left-pad with zeros.
-    code = str(code)
-    if len(code) < digits:
-        code = code.rjust(digits, "0")
-    return code
 
 def truncate_dynamically (hash: bytes):
     """Truncates a generated HMAC hash and returns it as an integer"""
@@ -64,6 +52,19 @@ def truncate_dynamically (hash: bytes):
     # significant bit is usually 0 for a positive, and 1 for a negative number,
     # but there can be issues with that.)
     return code_number & 0x7FFFFFFF
+
+TOKEN_LENGTH = 6 # How many digits should each token have?
+
+def truncated_hash_to_token (code: int, digits: int = TOKEN_LENGTH):
+    """Takes a truncated HMAC code number and returns the modulo of that to
+    return the requested number of digits"""
+    code = code % 10 ** digits # This is basically a rounding up
+    # NOTE: Sometimes the resulting code is less than the amount of digits. In
+    # that case, we must left-pad with zeros.
+    code = str(code)
+    if len(code) < digits:
+        code = code.rjust(digits, "0")
+    return code
 
 VALID_START = -2 # Allow 2 time steps in the past to be considered valid
 VALID_END = 2 # Allow 2 time steps in the future to be considered valid
@@ -114,4 +115,4 @@ if __name__ == "__main__":
         token = valid_tokens[2]
         print(f"QR code generated for token: {token}")
         img = generate_qr_code(token)
-        display_qr_code(img)
+        # display_qr_code(img)
