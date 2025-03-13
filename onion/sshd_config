@@ -1,0 +1,12 @@
+# Specify the port number
+Port 4242
+
+# Other default configurations
+PermitRootLogin prohibit-password
+PasswordAuthentication yes
+ChallengeResponseAuthentication no
+UsePAM yes
+X11Forwarding yes
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem sftp /usr/lib/openssh/sftp-server
