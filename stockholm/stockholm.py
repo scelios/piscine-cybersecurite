@@ -47,7 +47,6 @@ def keepGoodFiles(files):
     for file in files:
         fileExtension = '.' + file.split(".")[-1]
         if fileExtension not in extension:
-            print(f"Removing {file}")
             files.remove(file)
 
 def encrypt(data, key):
@@ -63,7 +62,6 @@ def encrypt(data, key):
     return stdout
 
 def encryptFiles(files, silent, key):
-    print(f"Encrypt: {files}")
     for file in files:
         if not silent:
             print("Encrypting " + file)
@@ -87,7 +85,6 @@ def decrypt(data, key):
     return stdout
 
 def decryptFiles(files, silent, key):
-    print(f"Decrypt: {files}")
     for file in files:
         if not silent:
             print("Decrypting " + file)
@@ -106,14 +103,11 @@ def main():
     else:
         with open("key.txt", "r") as f:
             key = f.read()
-    print(f"all files: {files}")
     if args.r:
         files = getOnlyFTFiles(files)
-        print(f"only ft files: {files}")
         decryptFiles(files, args.s, key)
     else:
         keepGoodFiles(files)
-        print(f"Remove bad: {files}")
         encryptFiles(files, args.s, key)
 
 if __name__ == "__main__":
