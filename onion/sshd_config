@@ -1,10 +1,23 @@
 # Specify the port number
 Port 4242
 
-# Other default configurations
+# Permit root login
 PermitRootLogin prohibit-password
-PasswordAuthentication yes
+
+# Disable password authentication and use key-based authentication
+PasswordAuthentication no
 ChallengeResponseAuthentication no
+
+# Allow only specific users to connect via SSH
+AllowUsers appuser
+
+# Disable empty passwords
+PermitEmptyPasswords no
+
+# Enable logging
+LogLevel VERBOSE
+
+# Other default configurations
 UsePAM yes
 X11Forwarding yes
 PrintMotd no

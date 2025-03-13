@@ -18,11 +18,20 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Create a user and set a password
 RUN useradd -m -s /bin/bash appuser && echo "appuser:password" | chpasswd
 
+# Set root password
+RUN echo "root:rootpassword" | chpasswd
+
 # Copy the nginx configuration file
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy the SSH configuration file
 COPY sshd_config /etc/ssh/sshd_config
+
+# Add SSH key for appuser
+RUN mkdir -p /home/appuser/.ssh && \
+    echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDEx3KKgXahnDxKmvug2KJTz+mrlgGVBouJa74zTvkAtJBAH+P0+WAlje0OZMuSY3SgLDbpnp+wV8wra23heGKWqYBoK6khoZRN3LAg7P6ni4nN6N/WQ6YzxQg9+jYJCotAaXAJJvrN2W0N6x9kYpi/GX0+2zZFzidbv8CzovDm5I9M477ynPvohsNmxZDnLznC/mjdNJAcK3wVWupkZ1Pcx7XlSLgyC/ODOuUOEln/LX/8mtoCh8IUfdIa7MaAHmDr6hQA1TKw/JLuy7b1pJde4G6URpLKxR/eGF+1UJbahpEy7xASlCOdc7yBYZsFXYqQUFUwf9r3SPv7TDcr3PgAl/MC8V1CWQYSRgnnEK6spID0YThvGMgFj14WFlodXe7bTxaGXl14bRQrm7DDe4QB1iNoKLO/mjvyTbQtffxn/7vLoINxssvGy2z9D47eFRAyjqT7sX7G+JwAZwsfPYJAWpgMs/VpAHBrS+zZyIxCyySu7dqtOrb2AtlOiG7Q+T4LokqiWZXlI3JH8ow3X7lPWMVzNfiCuDivcmhfl+DONkWfMO4x/CaRvIXqyPNshgIf6wzD3AOBhY4kBnuSunn+fwGOd+8LWDO6rFQ+EsEJXmqm40kls46bYf4sTIKTJPfPJTtwar2fmKv/p3Qil+B0FBm7dfqyc0D16wELAIbmdw== your_email@example.com" > /home/appuser/.ssh/authorized_keys && \
+    chown -R appuser:appuser /home/appuser/.ssh && \
+    chmod 600 /home/appuser/.ssh/authorized_keys
 
 # Copy in the source code
 COPY src ./src
