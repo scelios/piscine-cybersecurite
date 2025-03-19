@@ -1,0 +1,13 @@
+FROM python:3
+
+RUN apt-get -y update \
+    && apt-get -y install sudo \
+    && apt -y install libpcap0.8 \
+    && apt-get -y install net-tools
+
+RUN apt-get -y install nano
+
+WORKDIR /usr/src/app
+
+
+CMD ["tail", "-f", "/dev/null"]
