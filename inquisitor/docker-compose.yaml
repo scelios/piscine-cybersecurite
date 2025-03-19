@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  server:
+    image: panubo/vsftpd:latest
+    container_name: server
+    ports:
+      - "21:21"
+    environment:
+      - FTP_USER=ftpuser
+      - FTP_PASSWORD=ftppass
+    volumes:
+      - /home/user42/Desktop/server:/srv
+    networks:
+      - inquisitor
+
+  client:
+    image: jlesage/filezilla
+    container_name: client
+    ports:
+      - "5800:5800"
+    volumes:
+      - ./storage:/storage:rw
+    networks:
+      - inquisitor
+
+  inquisitor:
+    build: .
+    image: inquisitor
+    container_name: inquisitor
+    networks:
+      - inquisitor
+
+networks:
+  inquisitor:
