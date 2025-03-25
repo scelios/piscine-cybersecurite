@@ -22,7 +22,7 @@ sudo docker build -t onion_project .
 To run the Docker container, use the following command:
 
 ```sh
-sudo docker run -d -p 8080:80 -p 4242:4242 --name onion_container onion_project
+sudo docker run -p 8080:80 -p 4242:4242 --name onion_container onion_project
 ```
 
 ### Accessing the Services

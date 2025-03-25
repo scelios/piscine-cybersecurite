@@ -5,8 +5,8 @@ Port 4242
 PermitRootLogin prohibit-password
 
 # Disable password authentication and use key-based authentication
-PasswordAuthentication no
-ChallengeResponseAuthentication no
+PasswordAuthentication yes
+ChallengeResponseAuthentication yes
 
 # Allow only specific users to connect via SSH
 AllowUsers appuser
