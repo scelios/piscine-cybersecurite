@@ -1,14 +1,14 @@
 # OTP Generator
 
-Ce projet est un générateur de mots de passe à usage unique (OTP) basé sur l'algorithme TOTP (Time-Based One-Time Password). Il permet de générer des clés secrètes, de les chiffrer, et de produire des tokens OTP valides. Il inclut également la génération de QR codes pour faciliter l'intégration avec des applications OTP.
+This project is a one-time password (OTP) generator based on the TOTP (Time-Based One-Time Password) algorithm. It allows generating secret keys, encrypting them, and producing valid OTP tokens. It also includes QR code generation to facilitate integration with OTP applications.
 
 ---
 
-## Utilisation
+## Usage
 
-### Afficher l'aide
+### Display Help
 
-Pour afficher l'aide et les options disponibles, exécutez :
+To display help and available options, run:
 
 ```bash
 python ft_otp.py -h
@@ -16,41 +16,41 @@ python ft_otp.py -h
 
 ---
 
-### Générer une clé secrète OTP
+### Generate an OTP Secret Key
 
-Pour générer une clé secrète OTP et la chiffrer, utilisez l'option `-g` ou `--generate` suivie du chemin d'un fichier texte contenant la clé secrète brute :
+To generate an OTP secret key and encrypt it, use the `-g` or `--generate` option followed by the path to a text file containing the raw secret key:
 
 ```bash
 python ft_otp.py -g key.txt
 ```
 
-**Exemple :**  
-Si le fichier `key.txt` contient la clé brute `mysecretkey1234567890`, le programme chiffrera cette clé et la sauvegardera dans un fichier `key.hex`.
+**Example:**  
+If the file `key.txt` contains the raw key `mysecretkey1234567890`, the program will encrypt this key and save it in a file named `key.hex`.
 
 ---
 
-### Générer des tokens OTP
+### Generate OTP Tokens
 
-Pour générer des tokens OTP à partir d'une clé secrète chiffrée, utilisez l'option `-k` ou `--key` suivie du chemin du fichier `.hex` contenant la clé chiffrée :
+To generate OTP tokens from an encrypted secret key, use the `-k` or `--key` option followed by the path to the `.hex` file containing the encrypted key:
 
 ```bash
 python ft_otp.py -k key.hex
 ```
 
-**Exemple :**  
-Si le fichier `key.hex` contient une clé valide, le programme générera une liste de tokens OTP valides pour la période actuelle et affichera un QR code pour l'un des tokens.
+**Example:**  
+If the file `key.hex` contains a valid key, the program will generate a list of valid OTP tokens for the current period and display a QR code for one of the tokens.
 
 ---
 
-### Interruption du programme
+### Interrupt the Program
 
-Vous pouvez interrompre le programme à tout moment en appuyant sur `Ctrl+C`.
+You can interrupt the program at any time by pressing `Ctrl+C`.
 
 ---
 
-## Exemple de sortie
+## Example Output
 
-### Génération de clé secrète
+### Generating a Secret Key
 
 ```bash
 $ python ft_otp.py -g secret.txt
@@ -58,7 +58,7 @@ Encrypting the secret key
 Secret key saved to key.hex
 ```
 
-### Génération de tokens OTP
+### Generating OTP Tokens
 
 ```bash
 $ python ft_otp.py -k key.hex
@@ -67,22 +67,22 @@ Valid tokens: ['123456', '654321', '789012', '345678', '901234']
 QR code generated for token: 789012
 ```
 
-Un QR code sera affiché dans une fenêtre graphique.
+A QR code will be displayed in a graphical window.
 
 ---
 
-## Avertissements
+## Warnings
 
-- Assurez-vous que les fichiers d'entrée respectent les formats attendus :
-  - `.txt` pour les clés brutes.
-  - `.hex` pour les clés chiffrées.
-- Les clés secrètes doivent avoir une **longueur minimale de 64 caractères** et être un **multiple de 4**.
+- Ensure that the input files meet the expected formats:
+  - `.txt` for raw keys.
+  - `.hex` for encrypted keys.
+- Secret keys must have a **minimum length of 64 characters** and be a **multiple of 4**.
 
 ---
 
-## Comparaison avec `oathtool`
+## Comparison with `oathtool`
 
-Vous pouvez comparer les tokens générés avec l'outil `oathtool` :
+You can compare the generated tokens with the `oathtool` utility:
 
 ```bash
 oathtool --base32 --totp $(cat key.hex)
@@ -90,12 +90,11 @@ oathtool --base32 --totp $(cat key.hex)
 
 ---
 
-## Lancement du Docker
+## Running with Docker
+
 ```bash
 docker compose up --build
 docker exec -it otp bash
 ```
 
-## Licence
-
-Ce projet est sous licence MIT. Vous êtes libre de l'utiliser, de le modifier et de le distribuer.
+---

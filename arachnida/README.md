@@ -1,55 +1,55 @@
-# Projet Arachnida
+# Arachnida Project
 
-Ce projet contient deux scripts Python, `scorpion.py` et `spider.py`, qui permettent respectivement d'afficher les métadonnées EXIF d'une image et de télécharger des images à partir d'une URL de manière récursive. Les deux scripts peuvent être exécutés dans un conteneur Docker.
+This project contains two Python scripts, `scorpion.py` and `spider.py`, which respectively allow you to display the EXIF metadata of an image and download images recursively from a given URL. Both scripts can be executed within a Docker container.
 
-## Fonctionnalités
+## Features
 
 ### `scorpion.py`
-- Affiche les métadonnées EXIF d'une image.
-- Utilise une interface graphique pour afficher les informations EXIF et un aperçu de l'image.
-- Vérifie que le fichier est une image valide avant de traiter les données.
+- Displays the EXIF metadata of an image.
+- Uses a graphical interface to show EXIF information and a preview of the image.
+- Verifies that the file is a valid image before processing the data.
 
 ### `spider.py`
-- Télécharge des images à partir d'une URL donnée.
-- Fonctionne de manière récursive pour explorer les liens et télécharger toutes les images accessibles.
-- Enregistre les images dans un répertoire local.
+- Downloads images from a given URL.
+- Works recursively to explore links and download all accessible images.
+- Saves the images in a local directory.
 
-## Prérequis
+## Prerequisites
 
 - Docker
 - Docker Compose
 
-## Installation et Exécution
+## Installation and Execution
 
-1. Clonez ce dépôt sur votre machine locale :
+1. Clone this repository to your local machine:
    ```sh
-   git clone <URL_DU_DEPOT>
+   git clone <REPOSITORY_URL>
    cd arachnida
    ```
 
-2. Construisez et démarrez le conteneur Docker :
+2. Build and start the Docker container:
    ```sh
    docker compose up --build
    ```
 
-3. Accédez au conteneur Docker :
+3. Access the Docker container:
    ```sh
    docker exec -it python bash
    ```
 
-4. Exécutez les scripts selon vos besoins :
+4. Run the scripts as needed:
 
-   - Pour afficher les métadonnées EXIF d'une image avec `scorpion.py` :
+   - To display the EXIF metadata of an image using `scorpion.py`:
      ```sh
-     python scorpion.py <CHEMIN_VERS_L_IMAGE>
+     python scorpion.py <PATH_TO_IMAGE>
      ```
 
-   - Pour télécharger des images à partir d'une URL avec `spider.py` :
+   - To download images from a URL using `spider.py`:
      ```sh
      python spider.py <URL>
      ```
 
-## Structure du Projet
+## Project Structure
 
 ```
 arachnida/
@@ -61,13 +61,12 @@ arachnida/
     └── spider.py
 ```
 
-- **`docker-compose.yaml`** : Fichier de configuration Docker Compose.
-- **`dockerfile`** : Fichier Docker pour construire l'image Python.
-- **`scorpion.py`** : Script pour afficher les métadonnées EXIF d'une image.
-- **`spider.py`** : Script pour télécharger des images de manière récursive.
+- **`docker-compose.yaml`**: Docker Compose configuration file.
+- **`dockerfile`**: Docker file to build the Python image.
+- **`scorpion.py`**: Script to display the EXIF metadata of an image.
+- **`spider.py`**: Script to recursively download images.
 
 ## Notes
 
-- Assurez-vous que les images à analyser avec `scorpion.py` sont accessibles depuis le conteneur Docker.
-- Les images téléchargées par `spider.py` seront enregistrées dans le répertoire local du conteneur.
-
+- Ensure that the images to be analyzed with `scorpion.py` are accessible from the Docker container.
+- Images downloaded by `spider.py` will be saved in the container's local directory.
