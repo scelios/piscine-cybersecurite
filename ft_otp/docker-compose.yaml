@@ -1,0 +1,19 @@
+services:
+
+
+  otp:
+    build: .
+    container_name: otp
+    volumes:
+      - ./file:/usr/app
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=${DISPLAY} 
+    networks:
+      - inquisitor
+    working_dir: /usr/app
+    command: ["tail", "-f", "/dev/null"]
+
+
+networks:
+  inquisitor:

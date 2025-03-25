@@ -163,28 +163,30 @@ if __name__ == "__main__":
         print("Error: Invalid number of arguments")
         sys.exit(1)
 
-    
-    if args[0] == "-g" or args[0] == "--generate":
-        if check_file(args[1], ".txt") is False:
-            sys.exit(1)
-        print("Encrypting the secret key")
-        secret = open(args[1]).read()
-        save_and_encrypt_secret_key(secret)
-        print(f"Secret key saved to key.hex")
-
-    elif args[0] == "-k" or args[0] == "--key":
-        if check_file(args[1], ".hex") is False:
-            sys.exit(1)
-        print("Generating the OTP tokens")
-        hex = open(args[1]).read()
-        valid_tokens = generate_totp_tokens(hex)
-        print(f"Valid tokens: {valid_tokens}")
-        if valid_tokens:
-            token = valid_tokens[2]
-            print(f"QR code generated for token: {token}")
-            img = generate_qr_code(token)
-            display_qr_code(img)
-        # secret = base64.b64decode(hex)
-        # print(f"Secret key: {secret}")
-        # valid_tokens = generate_totp_tokens(secret)
+    try:
+        if args[0] == "-g" or args[0] == "--generate":
+            if check_file(args[1], ".txt") is False:
+                sys.exit(1)
+            print("Encrypting the secret key")
+            secret = open(args[1]).read()
+            save_and_encrypt_secret_key(secret)
+            print(f"Secret key saved to key.hex")
+        elif args[0] == "-k" or args[0] == "--key":
+            if check_file(args[1], ".hex") is False:
+                sys.exit(1)
+            print("Generating the OTP tokens")
+            hex = open(args[1]).read()
+            valid_tokens = generate_totp_tokens(hex)
+            print(f"Valid tokens: {valid_tokens}")
+            if valid_tokens:
+                token = valid_tokens[2]
+                print(f"QR code generated for token: {token}")
+                img = generate_qr_code(token)
+                display_qr_code(img)
+    except KeyboardInterrupt:
+        print("The program was interrupted by the user")
+        sys.exit(0)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        sys.exit(1)
         
