@@ -18,8 +18,8 @@ VALID_END = 2 # Allow 2 time steps in the future to be considered valid
 def save_and_encrypt_secret_key(secret: str):
     """Encrypts and saves the secret key to a file."""
     key = base64.b32encode(secret.encode())
-    if (len(key) < 64 or len(key) % 4 != 0):
-        print("Please provide a secret key of at least 64 characters and a multiple of 4")
+    if (len(key) < 64):
+        print("Please provide a secret key of at least 64 characters")
         sys.exit(1)
     # save the key to a file
     with open(f"key.hex", "wb") as file:
