@@ -1,0 +1,17 @@
+services:
+
+
+  python:
+    image: python:3.9
+    container_name: python
+    volumes:
+      - ./file:/usr/app
+    networks:
+      - inquisitor
+    working_dir: /usr/app
+    command: ["tail", "-f", "/dev/null"]
+
+
+
+networks:
+  inquisitor:

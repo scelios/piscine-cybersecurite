@@ -11,7 +11,6 @@ class Vaccine:
         self.output = args.o
         self.request_type = args.X
         self.input = self.extract_form_inputs(self.get_data_from_url())
-        self.payloads = self.get_payloads()
 
     def get_data_from_url(self):
         match self.request_type:
@@ -36,6 +35,10 @@ class Vaccine:
 
     def get_payloads(self):
         os.open("payloads.txt", "r")
+
+    def extract_form_inputs():
+        i=2
+
 def get_args():
     parser = argparse.ArgumentParser(
         description="SQL Injection tester, will test for SQL Injection vulnerabilities in a given URL"
