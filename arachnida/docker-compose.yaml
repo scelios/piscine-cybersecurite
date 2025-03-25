@@ -2,15 +2,17 @@ services:
 
 
   python:
-    image: python:3.9
+    build: .
     container_name: python
     volumes:
       - ./file:/usr/app
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=${DISPLAY} 
     networks:
       - inquisitor
     working_dir: /usr/app
     command: ["tail", "-f", "/dev/null"]
-
 
 
 networks:

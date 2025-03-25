@@ -37,7 +37,6 @@ def show_exif(file):
         exif_text += f"Image Width: {file_width} pixels\n"
         exif_text += f"Image Height: {file_height} pixels\n"
         exif_text += f"Image Endian: {file_endian}\n"
-
         for key, val in exif_data.items():
             if key in ExifTags.TAGS:
                 exif_text += f"{ExifTags.TAGS[key]}: {val}\n"
@@ -84,13 +83,19 @@ def main():
         print("Arguments:")
         print("  PATH          Path to your image file")
         sys.exit(0)
-    for arg in args:
-        if check_file(arg) is True:
-            show_exif(arg)
-        else:
-            print(f"File {arg} not found or not supported")
-            sys.exit(1)
-
+    try:
+        for arg in args:
+            if check_file(arg) is True:
+                show_exif(arg)
+            else:
+                print(f"File {arg} not found or not supported")
+                sys.exit(1)
+    except KeyboardInterrupt:
+        print("The program was interrupted by the user")
+        sys.exit(0)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

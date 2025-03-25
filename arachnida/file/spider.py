@@ -8,19 +8,55 @@ from urllib.parse import urljoin
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
 import os
+import signal
+from urllib.parse import urlparse
+import socket
 
-def fetch_url(url):
+class TimeoutException(Exception):
+    pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutException("The operation timed out")
+
+def is_valid_url(url):
+    try:
+        parsed = urlparse(url)
+        if not parsed.scheme or not parsed.netloc:
+            return False
+
+        socket.gethostbyname(parsed.netloc)
+        return True
+    except (socket.gaierror, ValueError):
+        return False
+
+def fetch_url(url, timeout=2, max_execution_time=2):
+
+    if not is_valid_url(url):
+        print(f"Invalid URL or domain cannot be resolved: {url}")
+        return None
+
+    signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(max_execution_time) 
+
     session = requests.Session()
     retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
     session.mount('https://', HTTPAdapter(max_retries=retries))
 
     try:
-        response = session.get(url)
+        response = session.get(url, timeout=timeout)
         response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
         return response
+    except TimeoutException:
+        print(f"Global timeout occurred while fetching {url}")
+        return None
+    except requests.exceptions.Timeout:
+        print(f"Timeout occurred while fetching {url}")
+        return None
     except requests.exceptions.RequestException as e:
         print(f"Error fetching {url}: {e}")
         return None
+    finally:
+        signal.alarm(0) 
 
 def download_file(url, path= "./data/"):
     # create the folder if it doesn't exist
@@ -49,7 +85,6 @@ def get_links_and_images(url, path= "./data/", level=0, all_links=[]):
     if level < 0:
         return
     else:
-        print(f" {level} Etching {url}")
         level -= 1
     response = fetch_url(url)
     if not response:
@@ -81,11 +116,11 @@ def get_links_and_images(url, path= "./data/", level=0, all_links=[]):
     
 
 def main():
-    parser = argparse.ArgumentParser(description='Process some arguments.')
-    parser.add_argument('-r', action='store_true', help='A boolean flag')
-    parser.add_argument('-l', type=int, nargs='?', default=None, help='A positional argument')
-    parser.add_argument('-p', type=str, nargs='?', default=None, help='A positional argument')
-    parser.add_argument('url', type=str, help='A positional argument')
+    parser = argparse.ArgumentParser(description='The spider program allow you to extract all the images from a website, recursively, by providing a url as a parameter.')
+    parser.add_argument('-r', action='store_true', help='Recursively downloads the images in a URL received as a parameter')
+    parser.add_argument('-l', type=int, nargs='?', default=None, help='Indicates the maximum depth level of the recursive download.\nIf not indicated, it will be 5')
+    parser.add_argument('-p', type=str, nargs='?', default=None, help='indicates the path where the downloaded files will be saved.\nIf not specified, ./data/ will be used.')
+    parser.add_argument('url', type=str, help='URL')
 
     args = parser.parse_args()
 
@@ -98,7 +133,7 @@ def main():
         'p': args.p if args.p is not None else "./data/",
         'url': args.url
     }
-    if (arguments['l'] < 0):
+    if (arguments['l'] < 0 or arguments['l'] is None or not isinstance(arguments['l'], int)):
         print("Error: The level must be a positive number")
         return
     if (arguments['l'] > 5):
@@ -106,10 +141,16 @@ def main():
         return
     if (arguments['p'][-1] != "/"):
         arguments['p'] += "/"
-    # print(arguments)
-    # download_file(arguments['url'], arguments['p'])
-    get_links_and_images(arguments['url'], arguments['p'], arguments['l'], [])
-    
+
+
+    try:
+        get_links_and_images(arguments['url'], arguments['p'], arguments['l'], [])
+    except KeyboardInterrupt:
+        print("The program was interrupted by the user")
+        return
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return
 
 
 if __name__ == "__main__":
