@@ -4,6 +4,7 @@ import sys
 import time
 import requests
 import json
+import re
 
 class Vaccine:
     def __init__(self, args):
@@ -36,8 +37,26 @@ class Vaccine:
     def get_payloads(self):
         os.open("payloads.txt", "r")
 
-    def extract_form_inputs():
-        i=2
+    def extract_form_inputs(self, data):
+        return re.findall(r'<input[^>]*>', data)
+    
+    def send_SQL_injection(self):
+        for root, _, files in os.walk("injection/detect/"):
+            for file in files:
+                file_path = os.path.join(root, file)
+                try:
+                    with open(file_path, "r") as f:
+                        payload = f.read()
+                        filename = file.split(".")[0]
+                        for input in self.input:
+                            requests.post(self.url, data={input: payload})
+                            with open(self.output, "a") as f:
+                                f.write(f"Payload: {payload} - Input: {input}\n")
+                except Exception as e:
+                    print(f"Error reading file {file_path}: {e}")
+    
+    # def check_database(self):
+        
 
 def get_args():
     parser = argparse.ArgumentParser(
